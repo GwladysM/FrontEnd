@@ -32,10 +32,10 @@ function genererWorks(works){
         workElement.appendChild(imageUrlElement);
         workElement.appendChild(titleElement);
    }
+
 }
 
 genererWorks(works);
-
 
 // Création des fonctions FILTER pour chaque boutton :
 
