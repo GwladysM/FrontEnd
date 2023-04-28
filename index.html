@@ -9,19 +9,21 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
 		rel="stylesheet">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	<meta name="description" content="">
-	<link rel="stylesheet" type="text/css" href="./assets/style.css">
-	<link rel="stylesheet" href="login.html">
+	<link rel="stylesheet" href="./assets/style.css">
+	<link href="login.html">
 </head>
 
 <body>
+	<div class="js"></div>
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
 			<ul>
 				<li><a href="index.html">projets</a></li>
 				<li><a href="#">contact</a></li>
-				<li><a href="login.html">login</a></li>
+				<li><a href="login.html" id="loginout">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -30,6 +32,7 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
+				<p class="js"><span class="material-symbols-outlined">edit_square</span> modifier</p>
 			</figure>
 			<article>
 				<h2>Designer d'espace</h2>
@@ -44,6 +47,7 @@
 		</section>
 		<section id="portfolio">
 			<h2>Mes Projets</h2>
+			<p class="js"><span class="material-symbols-outlined">edit_square</span> modifier</p>
 			<div class="categories">
 				<button class="btn-tous">Tous</button>
 				<button class="btn-objets">Objets</button>
@@ -77,8 +81,7 @@
 		</nav>
 	</footer>
 
-	<script type="module" src="./works.js"></script>
-
+	<script type="module" src="works.js"></script>
 </body>
 
 </html>
