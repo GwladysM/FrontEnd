@@ -9,14 +9,28 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
 		rel="stylesheet">
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<link href="login.html">
 </head>
 
 <body>
-	<div class="js"></div>
+	<section id="div1" class="js">
+		<a href="#modal1" class="js-modal" id="">ouvrir</a>
+		<aside id="modal1" class="modal" aria-hidden="true " role="dialog" aria-labelledby="titlemodal"
+			style="display: none;">
+			<div class="modal-wrapper js-modal-stop" id="">
+				<button class="js-modal-close">X</button>
+				<h3 id="titlemodal">Galerie photo</h3>
+				<p>Différentes photos à ajouter</p>
+				<input>Ajouter une photo</input>
+				<button>Supprimer la galerie</button>
+			</div>
+		</aside>
+	</section>
+
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
@@ -32,7 +46,6 @@
 		<section id="introduction">
 			<figure>
 				<img src="./assets/images/sophie-bluel.png" alt="">
-				<p class="js"><span class="material-symbols-outlined">edit_square</span> modifier</p>
 			</figure>
 			<article>
 				<h2>Designer d'espace</h2>
@@ -45,9 +58,10 @@
 					décorateur(trice)</p>
 			</article>
 		</section>
+		<div id="div2"></div>
 		<section id="portfolio">
+			<div id="div3"></div>
 			<h2>Mes Projets</h2>
-			<p class="js"><span class="material-symbols-outlined">edit_square</span> modifier</p>
 			<div class="categories">
 				<button class="btn-tous">Tous</button>
 				<button class="btn-objets">Objets</button>
