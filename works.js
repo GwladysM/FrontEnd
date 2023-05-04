@@ -98,73 +98,78 @@ function edition() {
 
     // Création de la bannière :
     const banner = document.getElementById("div1");
+    banner.style.marginTop = "0"
+    banner.style.backgroundColor = "black"
+    banner.style.height = "60px"
+    banner.style.width = "100vw"
+    banner.style.marginLeft = "calc(-1 * ((100vw - 100%) / 2))"
+    banner.style.display = "flex"
+    banner.style.justifyContent = "center"
+    banner.style.alignItems = "center"
 
-    const publierChgts = document.createElement('button')
+    const publierChgts = document.querySelector('.js-modal')
     publierChgts.innerText = "publier les changements"
-    publierChgts.style.color = "balck"
-    publierChgts.style.backgroundColor = "white"
-    publierChgts.style.borderRadius = "60px"
-    publierChgts.style.border = "none"
-    publierChgts.style.padding = "11px 23px"
-    publierChgts.style.marginLeft = "580px"
-    publierChgts.style.marginTop = "10px"
-    publierChgts.style.position = "absolute"
+    //publierChgts.style.backgroundColor = "white"
+    //publierChgts.style.borderRadius = "60px"
+    //publierChgts.style.border = "none"
+    //publierChgts.style.padding = "11px 23px"
+    //publierChgts.style.margin = "0px 5px"
 
     const modeEdition = document.createElement("p")
     modeEdition.innerText = "Mode édition"
     modeEdition.style.color = "white"
     modeEdition.style.backgroundColor = "black"
-    modeEdition.style.marginLeft = "460px"
-    modeEdition.style.paddingTop = "22px"
-    modeEdition.style.position = "absolute"
+    modeEdition.style.margin = "0px 5px"
 
     const iconeModif = document.createElement("img")
     iconeModif.src = "assets/icons/edit-white.png"
-    iconeModif.style.position = "absolute"
-    iconeModif.style.marginLeft = "430px"
-    iconeModif.style.marginTop = "19px"
     iconeModif.style.backgroundColor = "black"
+    iconeModif.style.margin = "0px 5px"
 
     banner.appendChild(iconeModif)
     banner.appendChild(modeEdition)
     banner.appendChild(publierChgts)
 
 
-    // Création des 2 bouttons modifier :
-    const div2 = document.getElementById("div2")
+    // Création du bouton modifier introduction :
 
-    const modeEditIntro = document.createElement("p")
-    modeEditIntro.innerText = "modifier"
-    modeEditIntro.style.position = "absolute"
-    modeEditIntro.style.marginTop = "-30px"
-    modeEditIntro.style.marginLeft = "90px"
+    const div2 = document.getElementById("div2")
+    div2.style.display = "flex"
+    div2.style.justifyContent = "flex-start"
+    div2.style.alignItems = "center"
+    div2.style.gap = "5px"
+    div2.style.margin = "55px"
+    div2.style.marginTop = "-40px"
 
     const iconeModifIntro = document.createElement("img")
     iconeModifIntro.src = "assets/icons/edit-black.png"
-    iconeModifIntro.style.position = "absolute"
-    iconeModifIntro.style.marginTop = "-33px"
-    iconeModifIntro.style.marginLeft = "65px"
 
-    div2.appendChild(modeEditIntro)
+    const modeEditIntro = document.createElement("p")
+    modeEditIntro.innerText = "modifier"
+
     div2.appendChild(iconeModifIntro)
+    div2.appendChild(modeEditIntro)
 
+
+    // Création du bouton modifier projets :
 
     const div3 = document.getElementById("div3")
+    div3.style.display = "flex"
+    div3.style.justifyContent = "end"
+    div3.style.alignItems = "center"
+    div3.style.gap = "5px"
+    div3.style.marginBottom = "50px"
+    div3.style.marginTop = "-50px"
+    div3.style.marginRight = "180px"
+    
+    const iconeModifProj = document.createElement("img")
+    iconeModifProj.src = "assets/icons/edit-black.png"
 
     const modeEditProj = document.createElement("a")
     modeEditProj.innerText = "modifier"
-    modeEditProj.style.position = "absolute"
-    modeEditProj.style.marginLeft = "725px"
-    modeEditProj.style.marginTop = "9px"
 
-    const iconeModifProj = document.createElement("img")
-    iconeModifProj.src = "assets/icons/edit-black.png"
-    iconeModifProj.style.position = "absolute"
-    iconeModifProj.style.marginLeft = "700px"
-    iconeModifProj.style.marginTop = "5px"
-
-    div3.appendChild(modeEditProj)
     div3.appendChild(iconeModifProj)
+    div3.appendChild(modeEditProj)
 }
 
 // Suppression des boutons catégories en mode edition :
@@ -173,18 +178,27 @@ function suppCat() {
     suppCat.style.display = "none"
 }
 
+// Bouton publier les changements :
+let btnPubliChgts = document.querySelector('#btn-modal')
+
+// Affichage du mode édition :
+
 if (userToken) {
     logOut();
     edition();
     suppCat();
+    btnPubliChgts.style.display = "block";
+}else {
+    btnPubliChgts.style.display = "none"
 }
 
 // Création de la modale :
+
 let modal = null
 
 const openModal = function (e) {
     e.preventDefault()
-    let modal = document.querySelector(e.target.getAttribute("href"))
+    modal = document.querySelector(e.target.getAttribute("href"))
     modal.style.display = null
     modal.removeAttribute("aria-hidden")
     modal.setAttribute("aria-modal", "true")
@@ -214,7 +228,52 @@ document.querySelectorAll(".js-modal").forEach(a => {
 })
 
 window.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" || e.key === "Esc"){
-    closeModal(e)
+    if (e.key === "Escape" || e.key === "Esc") {
+        closeModal(e)
     }
- })
+})
+
+// Intégration des projets à la modale :
+
+function galerieWorks(works) {
+    for (let i = 0; i < works.length; i++) {
+
+        const project = works[i];
+
+        // Récupération de l'élt du DOM qui accueillera les projets :
+        const listGalerie = document.querySelector(".list-galerie")
+        listGalerie.style.display = "grid"
+        listGalerie.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr"
+        listGalerie.style.gap = "10px"
+
+        // Création d'une balise dédiée à un projet :
+        const workElement = document.createElement("project");
+
+        listGalerie.appendChild(workElement);
+
+        // Création des balises :
+        const imageUrlElement = document.createElement("img");
+        imageUrlElement.src = project.imageUrl;
+        imageUrlElement.style.width = "76px"
+        const titleElement = document.createElement("h3");
+        titleElement.innerText = "éditer";
+        titleElement.style.fontSize = "12px"
+        titleElement.style.margin = "0"
+
+        workElement.appendChild(imageUrlElement);
+        workElement.appendChild(titleElement);
+
+        // Création des icones de suppression et déplacement :
+        const moveElement = document.createElement("img")
+        moveElement.src = "assets/icons/move.png"
+        console.log(moveElement);
+
+        const trushElement = document.createElement("img")
+        trushElement.src = "assets/icons/trush.png"
+
+        imageUrlElement.appendChild(moveElement)
+        imageUrlElement.appendChild(trushElement)
+    }
+
+}
+galerieWorks(works);

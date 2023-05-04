@@ -18,19 +18,18 @@
 
 <body>
 	<section id="div1" class="js">
-		<a href="#modal1" class="js-modal" id="">ouvrir</a>
+		<a href="#modal1" class="js-modal" id="btn-modal"></a>
 		<aside id="modal1" class="modal" aria-hidden="true " role="dialog" aria-labelledby="titlemodal"
 			style="display: none;">
-			<div class="modal-wrapper js-modal-stop" id="">
+			<div class="modal-content js-modal-stop" id="">
 				<button class="js-modal-close">X</button>
 				<h3 id="titlemodal">Galerie photo</h3>
-				<p>Différentes photos à ajouter</p>
-				<input>Ajouter une photo</input>
-				<button>Supprimer la galerie</button>
+				<p class="list-galerie"></p>
+				<input type="submit" value="Ajouter une photo"></input>
+				<button id="btn-supp-gal">Supprimer la galerie</button>
 			</div>
 		</aside>
 	</section>
-
 	<header>
 		<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 		<nav>
@@ -60,8 +59,8 @@
 		</section>
 		<div id="div2"></div>
 		<section id="portfolio">
-			<div id="div3"></div>
 			<h2>Mes Projets</h2>
+			<div id="div3"></div>
 			<div class="categories">
 				<button class="btn-tous">Tous</button>
 				<button class="btn-objets">Objets</button>
