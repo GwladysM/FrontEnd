@@ -107,13 +107,13 @@ function edition() {
     banner.style.justifyContent = "center"
     banner.style.alignItems = "center"
 
-    const publierChgts = document.querySelector('.js-modal')
+    const publierChgts = document.querySelector("p")
     publierChgts.innerText = "publier les changements"
-    //publierChgts.style.backgroundColor = "white"
-    //publierChgts.style.borderRadius = "60px"
-    //publierChgts.style.border = "none"
-    //publierChgts.style.padding = "11px 23px"
-    //publierChgts.style.margin = "0px 5px"
+    publierChgts.style.backgroundColor = "white"
+    publierChgts.style.borderRadius = "60px"
+    publierChgts.style.border = "none"
+    publierChgts.style.padding = "11px 23px"
+    publierChgts.style.margin = "0px 5px"
 
     const modeEdition = document.createElement("p")
     modeEdition.innerText = "Mode édition"
@@ -161,11 +161,11 @@ function edition() {
     div3.style.marginBottom = "50px"
     div3.style.marginTop = "-50px"
     div3.style.marginRight = "180px"
-    
+
     const iconeModifProj = document.createElement("img")
     iconeModifProj.src = "assets/icons/edit-black.png"
 
-    const modeEditProj = document.createElement("a")
+    const modeEditProj = document.querySelector('.js-modal')
     modeEditProj.innerText = "modifier"
 
     div3.appendChild(iconeModifProj)
@@ -178,18 +178,12 @@ function suppCat() {
     suppCat.style.display = "none"
 }
 
-// Bouton publier les changements :
-let btnPubliChgts = document.querySelector('#btn-modal')
-
 // Affichage du mode édition :
 
 if (userToken) {
     logOut();
     edition();
     suppCat();
-    btnPubliChgts.style.display = "block";
-}else {
-    btnPubliChgts.style.display = "none"
 }
 
 // Création de la modale :
@@ -244,10 +238,14 @@ function galerieWorks(works) {
         const listGalerie = document.querySelector(".list-galerie")
         listGalerie.style.display = "grid"
         listGalerie.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr"
-        listGalerie.style.gap = "10px"
+        listGalerie.style.width = "100%"
+        listGalerie.style.height = "100%"
 
         // Création d'une balise dédiée à un projet :
         const workElement = document.createElement("project");
+        workElement.style.position = "relative"
+        workElement.style.display = "grid"
+        workElement.style.justifyItems = "center"
 
         listGalerie.appendChild(workElement);
 
@@ -255,25 +253,52 @@ function galerieWorks(works) {
         const imageUrlElement = document.createElement("img");
         imageUrlElement.src = project.imageUrl;
         imageUrlElement.style.width = "76px"
+        imageUrlElement.style.position = "absolute"
+        imageUrlElement.style.zIndex = "1"
+
         const titleElement = document.createElement("h3");
         titleElement.innerText = "éditer";
         titleElement.style.fontSize = "12px"
         titleElement.style.margin = "0"
+        titleElement.style.position = "absolute"
+        titleElement.style.zIndex = "1";
+        titleElement.style.top = "105px";
+        titleElement.style.left = "7px";
 
-        workElement.appendChild(imageUrlElement);
-        workElement.appendChild(titleElement);
-
-        // Création des icones de suppression et déplacement :
         const moveElement = document.createElement("img")
         moveElement.src = "assets/icons/move.png"
-        console.log(moveElement);
+        moveElement.style.display = "none"
+        //    function moveImg() {
+        //        moveElement.style.display = null
+        //    }
+        //    imageUrlElement.addEventListener("click", moveImg)
 
         const trushElement = document.createElement("img")
         trushElement.src = "assets/icons/trush.png"
+        trushElement.style.position = "absolute"
+        trushElement.style.zIndex = "2"
+        trushElement.style.left = "60px"
+        trushElement.style.top = "5px"
 
-        imageUrlElement.appendChild(moveElement)
-        imageUrlElement.appendChild(trushElement)
+        workElement.appendChild(imageUrlElement);
+        workElement.appendChild(titleElement);
+        workElement.appendChild(moveElement);
+        workElement.appendChild(trushElement);
+
+        trushElement.addEventListener("click", function() {
+            
+        })
+
+        //function deleteProject() {
+//
+        //    const response = fetch("http://localhost:5678/api/works/[i]", {
+        //        method: "DELETE",
+        //        headers: {
+        //            'accept: */*',
+        //            'Authorization: Bearer'
+        //    },
+        //    })
+        //}
     }
-
 }
 galerieWorks(works);

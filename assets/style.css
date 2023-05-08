@@ -234,17 +234,12 @@ footer nav ul {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(0, 0, 0, 0.8 );
+	background: rgba(0, 0, 0, 0.3 );
 }
 
 .js-modal {
 	text-decoration: none;
 	color: black;
-	background-color: white;
-    border-radius: 60px;
-    border: none;
-    padding: 11px 23px;
-    margin :0px 5px;
 }
 
 .modal-content {
@@ -276,7 +271,7 @@ footer nav ul {
 .modal-content p {
 	background-color: white;
 	border-bottom: 1px solid #B3B3B3;
-	padding: 50px 40px;
+	padding: 50px 70px;
 }
 
 .modal-content input {
