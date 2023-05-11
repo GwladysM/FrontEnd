@@ -79,7 +79,9 @@ boutonHotels.addEventListener("click", function () {
     generateWorks(worksHotels);
 });
 
-//
+//////     PARTIE LOGIN ET MODE EDITION //////
+
+
 // Récupération du token :
 const userToken = window.localStorage.getItem("token");
 
@@ -185,120 +187,3 @@ if (userToken) {
     edition();
     suppCat();
 }
-
-// Création de la modale :
-
-let modal = null
-
-const openModal = function (e) {
-    e.preventDefault()
-    modal = document.querySelector(e.target.getAttribute("href"))
-    modal.style.display = null
-    modal.removeAttribute("aria-hidden")
-    modal.setAttribute("aria-modal", "true")
-    modal.addEventListener("click", closeModal)
-    modal.querySelector(".js-modal-close").addEventListener("click", closeModal)
-    modal.querySelector(".js-modal-stop").addEventListener("click", stopPropagation)
-}
-
-const closeModal = function (e) {
-    if (modal === null) return
-    e.preventDefault()
-    modal.style.display = "none"
-    modal.setAttribute("aria-hidden", "true")
-    modal.removeAttribute("aria-modal")
-    modal.removeEventListener("click", closeModal)
-    modal.querySelector(".js-modal-close").removeEventListener("click", closeModal)
-    modal.querySelector(".js-modal-stop").removeEventListener("click", stopPropagation)
-    modal = null
-}
-
-const stopPropagation = function (e) {
-    e.stopPropagation()
-}
-
-document.querySelectorAll(".js-modal").forEach(a => {
-    a.addEventListener("click", openModal)
-})
-
-window.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" || e.key === "Esc") {
-        closeModal(e)
-    }
-})
-
-// Intégration des projets à la modale :
-
-function galerieWorks(works) {
-    for (let i = 0; i < works.length; i++) {
-
-        const project = works[i];
-
-        // Récupération de l'élt du DOM qui accueillera les projets :
-        const listGalerie = document.querySelector(".list-galerie")
-        listGalerie.style.display = "grid"
-        listGalerie.style.gridTemplateColumns = "1fr 1fr 1fr 1fr 1fr"
-        listGalerie.style.width = "100%"
-        listGalerie.style.height = "100%"
-
-        // Création d'une balise dédiée à un projet :
-        const workElement = document.createElement("project");
-        workElement.style.position = "relative"
-        workElement.style.display = "grid"
-        workElement.style.justifyItems = "center"
-
-        listGalerie.appendChild(workElement);
-
-        // Création des balises :
-        const imageUrlElement = document.createElement("img");
-        imageUrlElement.src = project.imageUrl;
-        imageUrlElement.style.width = "76px"
-        imageUrlElement.style.position = "absolute"
-        imageUrlElement.style.zIndex = "1"
-
-        const titleElement = document.createElement("h3");
-        titleElement.innerText = "éditer";
-        titleElement.style.fontSize = "12px"
-        titleElement.style.margin = "0"
-        titleElement.style.position = "absolute"
-        titleElement.style.zIndex = "1";
-        titleElement.style.top = "105px";
-        titleElement.style.left = "7px";
-
-        const moveElement = document.createElement("img")
-        moveElement.src = "assets/icons/move.png"
-        moveElement.style.display = "none"
-        //    function moveImg() {
-        //        moveElement.style.display = null
-        //    }
-        //    imageUrlElement.addEventListener("click", moveImg)
-
-        const trushElement = document.createElement("img")
-        trushElement.src = "assets/icons/trush.png"
-        trushElement.style.position = "absolute"
-        trushElement.style.zIndex = "2"
-        trushElement.style.left = "60px"
-        trushElement.style.top = "5px"
-
-        workElement.appendChild(imageUrlElement);
-        workElement.appendChild(titleElement);
-        workElement.appendChild(moveElement);
-        workElement.appendChild(trushElement);
-
-        trushElement.addEventListener("click", function() {
-            
-        })
-
-        //function deleteProject() {
-//
-        //    const response = fetch("http://localhost:5678/api/works/[i]", {
-        //        method: "DELETE",
-        //        headers: {
-        //            'accept: */*',
-        //            'Authorization: Bearer'
-        //    },
-        //    })
-        //}
-    }
-}
-galerieWorks(works);

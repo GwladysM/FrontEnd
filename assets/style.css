@@ -198,7 +198,7 @@ li a:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
-input[type="submit"]{
+input[type="submit"], input[type="button"]{
 	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
@@ -237,12 +237,12 @@ footer nav ul {
 	background: rgba(0, 0, 0, 0.3 );
 }
 
-.js-modal {
+.js-modal, .js-modal2{
 	text-decoration: none;
 	color: black;
 }
 
-.modal-content {
+.modal-content, .modal2-content {
 	background-color: white;
 	width: 630px;
 	height: 730px;
@@ -261,20 +261,20 @@ footer nav ul {
 	margin-left: 576px;
 }
 
-.modal-content h3 {
+.modal-content h3, .modal2-content h3 {
 	font-size: 26px;
 	font-weight: 400;
 	background-color: white;
 	margin: 10px;
 }
 
-.modal-content p {
+.modal-content p, .modal2-content p {
 	background-color: white;
 	border-bottom: 1px solid #B3B3B3;
 	padding: 50px 70px;
 }
 
-.modal-content input {
+.modal-content input{
 	font-size: 14px;
 	border: none;
 	width: 240px;
@@ -286,4 +286,79 @@ footer nav ul {
 	font-family: 'Syne';
 	border: none;
 	background-color: white;
+}
+
+#form-add {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	background-color: white;
+	padding: 0px 100px;
+}
+
+#form-add label {
+	background-color: white;
+}
+
+#titre {
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+	width: 100%;
+}
+
+#chose-cat {
+	width: 420px;
+	height: 51px;
+	border: none;
+	background-color: white;
+	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+
+.modal2-content input{
+	font-size: 14px;
+	border: none;
+	padding: 20px;
+}
+
+.btn-modal2 {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	background-color: white;
+}
+
+.js-modal2-close {
+	background-color: white;
+	border: none;
+}
+
+.img-add {
+	height: 200px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+	background-color: #E8F1F6;
+	margin: 20px 0px;
+	border-radius: 3px;
+}
+
+.img-add input {
+	font-family: 'Work Sans';
+	color: #306685;
+	text-align: center;
+	background: #CBD6DC;
+	border-radius: 50px;
+}
+
+.img-add img {
+	background-color: #E8F1F6;
+}
+
+.img-add p {
+	font-size: 10px;
+	color: #444444;
+	background-color: #E8F1F6;
+	border: none;
+	padding: 0;
 }
