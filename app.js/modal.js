@@ -91,11 +91,11 @@ function galerieWorks(works) {
         moveElement.style.top = "5px"
 
         // Affichage de l'icone déplacer :
-        imageUrlElement.addEventListener("mouseover", function(event){
-            moveElement.style.display = null 
-            setTimeout(function() {
-            moveElement.style.display = "none";
-        }, 500);
+        imageUrlElement.addEventListener("mouseover", function (event) {
+            moveElement.style.display = null
+            setTimeout(function () {
+                moveElement.style.display = "none";
+            }, 500);
         }, false);
 
         // Icone supprimer :
@@ -128,7 +128,7 @@ const userToken = window.localStorage.getItem("token");
 // Création de la fonction suppression d'un projet :
 
 function deleteWork(id) {
-    fetch("http://localhost:5678/api/works/"+id, {
+    fetch("http://localhost:5678/api/works/" + id, {
         method: "DELETE",
         headers: {
             'accept': '*/*',
@@ -148,7 +148,7 @@ const openModal2 = function (e) {
     modal2.removeAttribute("aria-hidden")
     modal2.setAttribute("aria-modal", "true")
     modal2.addEventListener("click", closeModal2)
-    modal2.querySelector(".js-modal2-close").addEventListener("click", closeModal2)
+    modal2.querySelector(".back").addEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-stop").addEventListener("click", stopPropagation)
 }
 
@@ -162,15 +162,81 @@ const closeModal2 = function (e) {
     modal2.querySelector(".js-modal2-close").removeEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-stop").removeEventListener("click", stopPropagation)
     modal2 = null
-    closeModal(e)
-}
-if (modal2) {
-    modal2.getElementById("btn-back").addEventListener("click", console.log("ok"))
 }
 
 
-// Click sur modale 2 :
+// Bouton ouvrir la modale 2 "ajouter une photo" :
 document.querySelectorAll(".js-modal2").forEach(input => {
     input.addEventListener("click", openModal2)
-    })
+})
 
+// Bouton fermer modale 1 et modale 2 :
+document.querySelectorAll(".js-modal2-close").forEach(input => {
+    input.addEventListener("click", closeModal2)
+    input.addEventListener("click", closeModal)
+})
+
+
+// MISE EN PLACE DU FORMULAIRE D'AJOUT PROJET : //
+
+const imgUpload = document.querySelector("#img-upload");
+imgUpload.addEventListener("change", previewFile);
+
+function previewFile() {
+    const fileExtRegex = /\.(jpg|png)$/i;
+    if (this.files.length === 0 || !fileExtRegex.test(this.files[0].name)) {
+        return;
+    }
+
+    const file = this.files[0];
+
+    const fileReader = new FileReader();
+
+    fileReader.readAsDataURL(file);
+
+    fileReader.addEventListener("load", (event) => displayImage(event, file));
+}
+
+function displayImage(event, file) {
+    const divElement = document.querySelector(".img-add")
+
+    const imageElement = document.createElement("img");
+    imageElement.src = event.target.result;
+    imageElement.style.height = "100%";
+    
+    const logoElement = document.querySelector("#logo")
+    const btnElement = document.querySelector("#btn-img-upload")
+    const pElement = document.querySelector("#p")
+
+    divElement.appendChild(imageElement)
+    divElement.appendChild(logoElement)
+    divElement.appendChild(btnElement)
+    divElement.appendChild(pElement)
+
+    logoElement.style.display = "none"
+    btnElement.style.display = "none"
+    pElement.style.display = "none"
+}
+
+const formData = new FormData();
+formData.append("title", title.value);
+formData.append("imageUrl", imageUrl.value);
+formData.append("categoryId", categoryId.value)
+
+const request = new XMLHttpRequest();
+request.open("POST", "http://localhost:5678/api/works/");
+request.send(formData);
+
+function addProject() {
+    fetch("http://localhost:5678/api/works/", {
+        method: "POST",
+        headers: {
+            'accept': 'application/json',
+            'Authorization': 'Bearer' + " " + userToken,
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+}
+
+const sendWork = document.querySelector("#valid");
+sendWork.addEventListener("click", console.log("OK"))

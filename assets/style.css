@@ -240,6 +240,7 @@ footer nav ul {
 .js-modal, .js-modal2{
 	text-decoration: none;
 	color: black;
+	cursor: pointer;
 }
 
 .modal-content, .modal2-content {
@@ -256,9 +257,7 @@ footer nav ul {
 }
 
 .js-modal-close {
-	background-color: white;
-	border-width: 0;
-	margin-left: 576px;
+	align-self: flex-end;
 }
 
 .modal-content h3, .modal2-content h3 {
@@ -274,7 +273,7 @@ footer nav ul {
 	padding: 50px 70px;
 }
 
-.modal-content input{
+.js-modal2{
 	font-size: 14px;
 	border: none;
 	width: 240px;
@@ -297,11 +296,11 @@ footer nav ul {
 	padding: 0px 100px;
 }
 
-#form-add label {
+label[for="title"], label[for="category"] {
 	background-color: white;
 }
 
-#titre {
+#title {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 	width: 100%;
 }
@@ -343,12 +342,14 @@ footer nav ul {
 	border-radius: 3px;
 }
 
-.img-add input {
+label[for="img-upload"] {
 	font-family: 'Work Sans';
 	color: #306685;
 	text-align: center;
 	background: #CBD6DC;
 	border-radius: 50px;
+	padding: 10px 30px;
+	cursor: pointer;
 }
 
 .img-add img {

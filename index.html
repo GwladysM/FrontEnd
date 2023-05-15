@@ -56,7 +56,7 @@
 				<aside id="modal1" class="modal" aria-hidden="true" role="dialog" aria-labelledby="titlemodal"
 					style="display: none;">
 					<div class="modal-content js-modal-stop" id="">
-						<button class="js-modal-close">X</button>
+						<input type="image" src="assets/icons/close.png" class="js-modal-close">
 						<h3 id="titlemodal">Galerie photo</h3>
 						<p class="list-galerie"></p>
 						<input type="button" value="Ajouter une photo" href="#modal2" class="js-modal2" id="btn-modal">
@@ -72,24 +72,25 @@
 					<div class="modal2-content js-modal2-stop">
 						<div class="btn-modal2">
 							<input type="image" src="assets/icons/back.png" class="back" id="btn-back">
-							<button class="js-modal2-close">X</button>
+							<input type="image" src="assets/icons/close.png" class="js-modal2-close">
 						</div>
 						<h3 id="titlemodal2">Ajout photo</h3>
-						<form action="" method="post" id="form-add">
+						<form enctype="multipart/form-data" action="" method="post" id="form-add">
 							<div class="img-add">
-								<img src="assets/icons/picture.png" alt="">
-								<input type="image" value="+ Ajouter photo" required>
-								<p>jpg, png : 4mo</p>
+								<img id="logo" src="assets/icons/picture.png" alt="">
+								<input type="file" accept=".png, .jpg" id="img-upload" hidden required>
+								<label for="img-upload" id="btn-img-upload">+ Ajouter photo</label>
+								<p id="p" >jpg, png : 4mo</p>
 							</div>
-							<label for="titre">Titre</label>
-							<input type="text" id="titre" required>
-							<label for="categorie">Catégorie</label>
-							<select name="categorie" id="chose-cat" required>
+							<label for="title">Titre</label>
+							<input type="text" id="title" required>
+							<label for="category">Catégorie</label>
+							<select name="category" id="chose-cat" required>
 								<option value="" selected ></option>
 								<option value="1">Objet</option>
 								<option value="2">Appartement</option>
 								<option value="3">Hotel & Restaurant</option>
-							<input type="button" value="Valider">
+							<input type="button" value="Valider" id="valid">
 						</form>
 					</div>
 				</aside>
