@@ -79,7 +79,7 @@ function galerieWorks(works) {
         titleElement.style.position = "absolute"
         titleElement.style.zIndex = "1";
         titleElement.style.top = "105px";
-        titleElement.style.left = "7px";
+        titleElement.style.left = "13%";
 
         // Icone déplacer :
         const moveElement = document.createElement("img")
@@ -103,7 +103,7 @@ function galerieWorks(works) {
         trashElement.src = "assets/icons/trush.png"
         trashElement.style.position = "absolute"
         trashElement.style.zIndex = "2"
-        trashElement.style.left = "60px"
+        trashElement.style.right = "16%"
         trashElement.style.top = "5px"
 
         workElement.appendChild(imageUrlElement);
@@ -182,28 +182,26 @@ document.querySelectorAll(".js-modal2-close").forEach(input => {
 const imgUpload = document.querySelector("#img-upload");
 imgUpload.addEventListener("change", previewFile);
 
+// Création de la fonction prévisualisation de l'image chargée :
 function previewFile() {
     const fileExtRegex = /\.(jpg|png)$/i;
     if (this.files.length === 0 || !fileExtRegex.test(this.files[0].name)) {
         return;
     }
-
     const file = this.files[0];
-
     const fileReader = new FileReader();
-
     fileReader.readAsDataURL(file);
-
     fileReader.addEventListener("load", (event) => displayImage(event, file));
 }
 
+// Affichage de la photo du projet à la place du logo et "+ ajouter photo" :
 function displayImage(event, file) {
     const divElement = document.querySelector(".img-add")
 
     const imageElement = document.createElement("img");
     imageElement.src = event.target.result;
     imageElement.style.height = "100%";
-    
+
     const logoElement = document.querySelector("#logo")
     const btnElement = document.querySelector("#btn-img-upload")
     const pElement = document.querySelector("#p")
@@ -218,25 +216,53 @@ function displayImage(event, file) {
     pElement.style.display = "none"
 }
 
+
+// Création de l'objet formData :
+
+const selectedImg = imgUpload.files[0];
+const category = document.querySelector('select[name="category"]');
+const categoryOption = parseInt(category.value, 10);
+
 const formData = new FormData();
+
 formData.append("title", title.value);
-formData.append("imageUrl", imageUrl.value);
-formData.append("categoryId", categoryId.value)
+formData.append("image", selectedImg);
+formData.append("category", categoryOption);
 
-const request = new XMLHttpRequest();
-request.open("POST", "http://localhost:5678/api/works/");
-request.send(formData);
 
-function addProject() {
-    fetch("http://localhost:5678/api/works/", {
+// Appel à fetch pour poster un nouveau projet :
+async function addProject() {
+
+    // Création d'un content-type :
+    const boundary = '---------------------------1234567890';
+    const contentType = `multipart/form-data; boundary=${boundary}`;
+
+    // Appel à fetch :
+    const response = await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
             'accept': 'application/json',
-            'Authorization': 'Bearer' + " " + userToken,
-            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${userToken}`,
+            'Content-Type': contentType,
         },
-    })
-}
+        body: formData
+    });
+    const data = await response.json();
+    const createData = data.formData;
+    
+    // Conditions, 
+    // si image ou titre ou catégorie non renseignée,
+    // alors msg d'erreur :
+    if (!title.value || !selectedImg || !categoryOption) {
+        alert("Veuillez remplir tous les champs")
+    } else {
+        console.log("Tous les éléments sont présents"),
+        createData
+    }
+};
 
-const sendWork = document.querySelector("#valid");
-sendWork.addEventListener("click", console.log("OK"))
+const sendProject = document.getElementById("valid");
+sendProject.addEventListener("click", (event) => {
+    event.preventDefault();
+    addProject();
+});

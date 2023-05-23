@@ -47,6 +47,7 @@
 		</section>
 		<div id="div2"></div>
 		<section id="portfolio">
+			<div id="group1">
 			<h2>Mes Projets</h2>
 			<div id="div3">
 
@@ -75,27 +76,29 @@
 							<input type="image" src="assets/icons/close.png" class="js-modal2-close">
 						</div>
 						<h3 id="titlemodal2">Ajout photo</h3>
-						<form enctype="multipart/form-data" action="" method="post" id="form-add">
+						<form enctype='multipart/form-data' action="" method="post" id="form-add" name="form-add">
 							<div class="img-add">
 								<img id="logo" src="assets/icons/picture.png" alt="">
-								<input type="file" accept=".png, .jpg" id="img-upload" hidden required>
+								<input type="file" accept=".png, .jpg" id="img-upload" name="imageUrl" hidden required>
 								<label for="img-upload" id="btn-img-upload">+ Ajouter photo</label>
 								<p id="p" >jpg, png : 4mo</p>
 							</div>
 							<label for="title">Titre</label>
-							<input type="text" id="title" required>
+							<input type="text" id="title" name="title" required>
 							<label for="category">Catégorie</label>
 							<select name="category" id="chose-cat" required>
 								<option value="" selected ></option>
-								<option value="1">Objet</option>
-								<option value="2">Appartement</option>
-								<option value="3">Hotel & Restaurant</option>
-							<input type="button" value="Valider" id="valid">
+								<option value=1>Objet</option>
+								<option value=2>Appartement</option>
+								<option value=3>Hotel & Restaurant</option>
+							<input type="submit" value="Valider" id="valid">
 						</form>
+						<div></div>
 					</div>
 				</aside>
 
 			</div>
+		</div>
 			<div class="categories">
 				<button class="btn-tous">Tous</button>
 				<button class="btn-objets">Objets</button>

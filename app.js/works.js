@@ -140,8 +140,8 @@ function edition() {
     div2.style.justifyContent = "flex-start"
     div2.style.alignItems = "center"
     div2.style.gap = "5px"
-    div2.style.margin = "55px"
-    div2.style.marginTop = "-40px"
+    div2.style.margin = "5%"
+    div2.style.marginTop = "-4%"
 
     const iconeModifIntro = document.createElement("img")
     iconeModifIntro.src = "assets/icons/edit-black.png"
@@ -155,14 +155,17 @@ function edition() {
 
     // Création du bouton modifier projets :
 
+    const group1 = document.getElementById("group1")
+    group1.style.display = "flex"
+    group1.style.alignItems = "baseline"
+    group1.style.justifyContent = "center"
+
     const div3 = document.getElementById("div3")
     div3.style.display = "flex"
     div3.style.justifyContent = "end"
     div3.style.alignItems = "center"
     div3.style.gap = "5px"
-    div3.style.marginBottom = "50px"
-    div3.style.marginTop = "-50px"
-    div3.style.marginRight = "180px"
+    div3.style.paddingLeft = "5%"
 
     const iconeModifProj = document.createElement("img")
     iconeModifProj.src = "assets/icons/edit-black.png"
