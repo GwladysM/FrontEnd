@@ -1,3 +1,6 @@
+// Récupération du token :
+const userToken = window.localStorage.getItem("token");
+
 // Création de la PREMIERE modale :
 
 let modal = null
@@ -99,8 +102,8 @@ function galerieWorks(works) {
         }, false);
 
         // Icone supprimer :
-        let trashElement = document.createElement("img")
-        trashElement.src = "assets/icons/trush.png"
+        const trashElement = document.createElement("img")
+        trashElement.src = "assets/icons/trash.png"
         trashElement.style.position = "absolute"
         trashElement.style.zIndex = "2"
         trashElement.style.right = "16%"
@@ -110,20 +113,23 @@ function galerieWorks(works) {
         workElement.appendChild(titleElement);
         workElement.appendChild(moveElement);
         workElement.appendChild(trashElement);
-
+        
         const id = project.id;
-
-        trashElement.addEventListener("click", function () {
-            //alert("voulez-vous supprimer ce projet ?")
-            deleteWork(id);
-        })
+        
     }
 }
 galerieWorks(works);
 
+//.addEventListener("click", function () {
+//    if(window.confirm("voulez-vous supprimer ce projet ?")){
+//        deleteWork(id);
+//    }
+//    const worksMaj = Array.from(works)
+//    ///////////////// MAJ DE LA PAGE SANS RECHARGEMENT, ne fonctionne pas, à revoir :                
+//    document.querySelector(".list-galerie").innerHTML = '';
+//    galerieWorks(worksMaj);
+//})
 
-// Récupération du token :
-const userToken = window.localStorage.getItem("token");
 
 // Création de la fonction suppression d'un projet :
 
@@ -136,7 +142,7 @@ function deleteWork(id) {
             'Content-type': 'application/json'
         },
     })
-}
+};
 
 // Création de la DEUXIEME modale, ajout d'un projet : 
 let modal2 = null
@@ -148,32 +154,35 @@ const openModal2 = function (e) {
     modal2.removeAttribute("aria-hidden")
     modal2.setAttribute("aria-modal", "true")
     modal2.addEventListener("click", closeModal2)
-    modal2.querySelector(".back").addEventListener("click", closeModal2)
+    modal2.addEventListener("click", closeModal)
+    modal2.querySelector(".js-modal2-back").addEventListener("click", backModal)
+    modal2.querySelector(".js-modal2-close").addEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-stop").addEventListener("click", stopPropagation)
 }
 
 const closeModal2 = function (e) {
     if (modal2 === null) return
+    document.getElementById("form-add").reset();
     e.preventDefault()
     modal2.style.display = "none"
     modal2.setAttribute("aria-hidden", "true")
     modal2.removeAttribute("aria-modal")
     modal2.removeEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-close").removeEventListener("click", closeModal2)
+    modal2.querySelector(".js-modal2-close").removeEventListener("click", closeModal)
     modal2.querySelector(".js-modal2-stop").removeEventListener("click", stopPropagation)
     modal2 = null
 }
 
+const backModal = function (e) {
+    e.preventDefault()
+    modal.style.display = null
+    modal2.style.display = "none"
+}
 
 // Bouton ouvrir la modale 2 "ajouter une photo" :
 document.querySelectorAll(".js-modal2").forEach(input => {
     input.addEventListener("click", openModal2)
-})
-
-// Bouton fermer modale 1 et modale 2 :
-document.querySelectorAll(".js-modal2-close").forEach(input => {
-    input.addEventListener("click", closeModal2)
-    input.addEventListener("click", closeModal)
 })
 
 
@@ -220,25 +229,26 @@ function displayImage(event, file) {
 // Création de l'objet formData :
 
 const selectedImg = imgUpload.files[0];
-const category = document.querySelector('select[name="category"]');
-const categoryOption = parseInt(category.value, 10);
-
-const formData = new FormData();
-
-formData.append("title", title.value);
-formData.append("image", selectedImg);
-formData.append("category", categoryOption);
-
+const category = document.getElementById("chose-cat");
+const categoryId = parseInt(category.value);
+//const category = document.querySelector('select[name="category"]');
+//const categoryOption = parseInt(category.value, 10);
 
 // Appel à fetch pour poster un nouveau projet :
 async function addProject() {
-
+    const formData = new FormData();
+    
+    formData.append("title", title.value);
+    formData.append("imageUrl", selectedImg);
+    formData.append("categoryId", categoryId);
+    console.log(formData);
+    
     // Création d'un content-type :
     const boundary = '---------------------------1234567890';
     const contentType = `multipart/form-data; boundary=${boundary}`;
-
+    
     // Appel à fetch :
-    const response = await fetch("http://localhost:5678/api/works", {
+    await fetch("http://localhost:5678/api/works", {
         method: "POST",
         headers: {
             'accept': 'application/json',
@@ -247,17 +257,14 @@ async function addProject() {
         },
         body: formData
     });
-    const data = await response.json();
-    const createData = data.formData;
     
     // Conditions, 
     // si image ou titre ou catégorie non renseignée,
     // alors msg d'erreur :
-    if (!title.value || !selectedImg || !categoryOption) {
-        alert("Veuillez remplir tous les champs")
+    if (title.value && selectedImg && categoryId ) {
+        console.log("Tous les éléments sont présents");
     } else {
-        console.log("Tous les éléments sont présents"),
-        createData
+        alert("Veuillez remplir tous les champs")
     }
 };
 
