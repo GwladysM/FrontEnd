@@ -1,8 +1,7 @@
 // Récupération du token :
 const userToken = window.localStorage.getItem("token");
-
+//
 // Création de la PREMIERE modale :
-
 let modal = null
 
 const openModal = function (e) {
@@ -31,7 +30,7 @@ const closeModal = function (e) {
 const stopPropagation = function (e) {
     e.stopPropagation()
 }
-
+//
 // Click sur modale 1 :
 document.querySelectorAll(".js-modal").forEach(a => {
     a.addEventListener("click", openModal)
@@ -42,9 +41,8 @@ window.addEventListener("keydown", function (e) {
         closeModal(e)
     }
 })
-
+//
 // Intégration des projets à la modale :
-
 const reponse = await fetch('http://localhost:5678/api/works');
 const works = await reponse.json();
 
@@ -115,26 +113,24 @@ function galerieWorks(works) {
         workElement.appendChild(trashElement);
         
         const id = project.id;
-        
+
+        trashElement.addEventListener("click", function () {
+            if(window.confirm("voulez-vous supprimer ce projet ?")){
+                //deleteWork(id);
+                //const worksMaj = Array.from(works)
+                console.log(id);
+                //document.querySelector(".list-galerie").innerHTML = '';
+                //galerieWorks(worksMaj);
+            }
+        });
     }
 }
 galerieWorks(works);
 
-//.addEventListener("click", function () {
-//    if(window.confirm("voulez-vous supprimer ce projet ?")){
-//        deleteWork(id);
-//    }
-//    const worksMaj = Array.from(works)
-//    ///////////////// MAJ DE LA PAGE SANS RECHARGEMENT, ne fonctionne pas, à revoir :                
-//    document.querySelector(".list-galerie").innerHTML = '';
-//    galerieWorks(worksMaj);
-//})
-
-
+//
 // Création de la fonction suppression d'un projet :
-
-function deleteWork(id) {
-    fetch("http://localhost:5678/api/works/" + id, {
+async function deleteWork(id) {
+    await fetch("http://localhost:5678/api/works/" + id, {
         method: "DELETE",
         headers: {
             'accept': '*/*',
@@ -144,6 +140,7 @@ function deleteWork(id) {
     })
 };
 
+//
 // Création de la DEUXIEME modale, ajout d'un projet : 
 let modal2 = null
 
@@ -180,13 +177,14 @@ const backModal = function (e) {
     modal2.style.display = "none"
 }
 
+//
 // Bouton ouvrir la modale 2 "ajouter une photo" :
 document.querySelectorAll(".js-modal2").forEach(input => {
     input.addEventListener("click", openModal2)
 })
 
 
-// MISE EN PLACE DU FORMULAIRE D'AJOUT PROJET : //
+//// MISE EN PLACE DU FORMULAIRE D'AJOUT PROJET : ////
 
 const imgUpload = document.querySelector("#img-upload");
 imgUpload.addEventListener("change", previewFile);
@@ -227,7 +225,6 @@ function displayImage(event, file) {
 
 
 // Création de l'objet formData :
-
 const selectedImg = imgUpload.files[0];
 const category = document.getElementById("chose-cat");
 const categoryId = parseInt(category.value);
@@ -256,7 +253,7 @@ async function addProject() {
             'Content-Type': contentType,
         },
         body: formData
-    });
+    })
     
     // Conditions, 
     // si image ou titre ou catégorie non renseignée,
