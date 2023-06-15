@@ -236,13 +236,16 @@ async function addProject() {
     const formData = new FormData();
     
     formData.append("title", title.value);
-    formData.append("imageUrl", selectedImg);
-    formData.append("categoryId", categoryId);
-    console.log(formData);
+    formData.append("image", imgUpload.value);
+    formData.append("category", categoryId);
+    //console.log(formData);
+    for(var pair of formData.entries()) {
+        console.log(pair[0]+',' + pair[1]);
+    }
     
     // Création d'un content-type :
-    const boundary = '---------------------------1234567890';
-    const contentType = `multipart/form-data; boundary=${boundary}`;
+   // const boundary = '---------------------------1234567890';
+   // const contentType = `multipart/form-data; boundary=${boundary}`;
     
     // Appel à fetch :
     await fetch("http://localhost:5678/api/works", {
@@ -250,7 +253,7 @@ async function addProject() {
         headers: {
             'accept': 'application/json',
             'Authorization': `Bearer ${userToken}`,
-            'Content-Type': contentType,
+            //'Content-Type': contentType,
         },
         body: formData
     })
