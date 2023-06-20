@@ -1,3 +1,4 @@
+import { generateWorks } from "./works.js";
 // Récupération du token :
 const userToken = window.localStorage.getItem("token");
 //
@@ -43,8 +44,12 @@ window.addEventListener("keydown", function (e) {
 })
 //
 // Intégration des projets à la modale :
+let works = [];
 const reponse = await fetch('http://localhost:5678/api/works');
-const works = await reponse.json();
+works = await reponse.json();
+
+let trashElement;
+let id;
 
 function galerieWorks(works) {
     for (let i = 0; i < works.length; i++) {
@@ -73,14 +78,14 @@ function galerieWorks(works) {
         imageUrlElement.style.position = "absolute"
         imageUrlElement.style.zIndex = "1"
 
-        const titleElement = document.createElement("h3");
-        titleElement.innerText = "éditer";
-        titleElement.style.fontSize = "12px"
-        titleElement.style.margin = "0"
-        titleElement.style.position = "absolute"
-        titleElement.style.zIndex = "1";
-        titleElement.style.top = "105px";
-        titleElement.style.left = "13%";
+        const editElement = document.createElement("h3");
+        editElement.innerText = "éditer";
+        editElement.style.fontSize = "12px"
+        editElement.style.margin = "0"
+        editElement.style.position = "absolute"
+        editElement.style.zIndex = "1";
+        editElement.style.top = "105px";
+        editElement.style.left = "13%";
 
         // Icone déplacer :
         const moveElement = document.createElement("img")
@@ -100,7 +105,7 @@ function galerieWorks(works) {
         }, false);
 
         // Icone supprimer :
-        const trashElement = document.createElement("img")
+        trashElement = document.createElement("img")
         trashElement.src = "assets/icons/trash.png"
         trashElement.style.position = "absolute"
         trashElement.style.zIndex = "2"
@@ -108,21 +113,11 @@ function galerieWorks(works) {
         trashElement.style.top = "5px"
 
         workElement.appendChild(imageUrlElement);
-        workElement.appendChild(titleElement);
+        workElement.appendChild(editElement);
         workElement.appendChild(moveElement);
         workElement.appendChild(trashElement);
-        
-        const id = project.id;
 
-        trashElement.addEventListener("click", function () {
-            if(window.confirm("voulez-vous supprimer ce projet ?")){
-                //deleteWork(id);
-                //const worksMaj = Array.from(works)
-                console.log(id);
-                //document.querySelector(".list-galerie").innerHTML = '';
-                //galerieWorks(worksMaj);
-            }
-        });
+        id = project.id;
     }
 }
 galerieWorks(works);
@@ -130,23 +125,42 @@ galerieWorks(works);
 //
 // Création de la fonction suppression d'un projet :
 async function deleteWork(id) {
-    await fetch("http://localhost:5678/api/works/" + id, {
-        method: "DELETE",
-        headers: {
-            'accept': '*/*',
-            'Authorization': 'Bearer' + " " + userToken,
-            'Content-type': 'application/json'
-        },
-    })
+    try {
+        await fetch("http://localhost:5678/api/works/" + id, {
+            method: "DELETE",
+            headers: {
+                'accept': '*/*',
+                'Authorization': 'Bearer' + " " + userToken,
+                'Content-type': 'application/json'
+            },
+        })
+    } catch (error) {
+        console.error(error)
+    }
 };
+
+// Création de l'évènement suppression et actualisation du dom :
+trashElement.addEventListener("click", function () {
+    if (window.confirm("Voulez-vous supprimer ce projet ?")) {
+        deleteWork(id);
+    }
+    const worksMaj = works.filter(function (work) {
+        return work.id !== id;
+    });
+    document.querySelector(".list-galerie").innerHTML = '';
+    galerieWorks(worksMaj);
+    document.querySelector(".gallery").innerHTML = '';
+    generateWorks(worksMaj);
+    console.log("Ajouter une boucle pour pouvoir supprimer plusieurs projets à la suite ?");
+});
 
 //
 // Création de la DEUXIEME modale, ajout d'un projet : 
 let modal2 = null
 
-const openModal2 = function (e) {
-    e.preventDefault()
-    modal2 = document.querySelector(e.target.getAttribute("href"))
+const openModal2 = function (event) {
+    event.preventDefault()
+    modal2 = document.querySelector(event.target.getAttribute("href"))
     modal2.style.display = null
     modal2.removeAttribute("aria-hidden")
     modal2.setAttribute("aria-modal", "true")
@@ -155,12 +169,11 @@ const openModal2 = function (e) {
     modal2.querySelector(".js-modal2-back").addEventListener("click", backModal)
     modal2.querySelector(".js-modal2-close").addEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-stop").addEventListener("click", stopPropagation)
-}
+    }
 
-const closeModal2 = function (e) {
+const closeModal2 = function (event) {
     if (modal2 === null) return
-    document.getElementById("form-add").reset();
-    e.preventDefault()
+    event.preventDefault()
     modal2.style.display = "none"
     modal2.setAttribute("aria-hidden", "true")
     modal2.removeAttribute("aria-modal")
@@ -168,11 +181,13 @@ const closeModal2 = function (e) {
     modal2.querySelector(".js-modal2-close").removeEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-close").removeEventListener("click", closeModal)
     modal2.querySelector(".js-modal2-stop").removeEventListener("click", stopPropagation)
+    document.getElementById("form-add").reset();
+    resetImgForm();
     modal2 = null
 }
 
-const backModal = function (e) {
-    e.preventDefault()
+const backModal = function (event) {
+    event.preventDefault()
     modal.style.display = null
     modal2.style.display = "none"
 }
@@ -190,20 +205,22 @@ const imgUpload = document.querySelector("#img-upload");
 imgUpload.addEventListener("change", previewFile);
 
 // Création de la fonction prévisualisation de l'image chargée :
+let file;
 function previewFile() {
     const fileExtRegex = /\.(jpg|png)$/i;
     if (this.files.length === 0 || !fileExtRegex.test(this.files[0].name)) {
         return;
     }
-    const file = this.files[0];
+    file = this.files[0];
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.addEventListener("load", (event) => displayImage(event, file));
 }
 
 // Affichage de la photo du projet à la place du logo et "+ ajouter photo" :
+const divElement = document.querySelector(".img-add")
+
 function displayImage(event, file) {
-    const divElement = document.querySelector(".img-add")
 
     const imageElement = document.createElement("img");
     imageElement.src = event.target.result;
@@ -223,53 +240,76 @@ function displayImage(event, file) {
     pElement.style.display = "none"
 }
 
+// Fonction pour vider la prévisualisation de l'image :
+function resetImgForm() {
+    console.log("Ajouter quelque chose pour vider la partie image du formulaire");
+}
 
-// Création de l'objet formData :
-const selectedImg = imgUpload.files[0];
+//////////////////////////////////////////////////////////
+// Création de la fonction ajout d'un nouveau projet :
 const category = document.getElementById("chose-cat");
-const categoryId = parseInt(category.value);
-//const category = document.querySelector('select[name="category"]');
-//const categoryOption = parseInt(category.value, 10);
-
-// Appel à fetch pour poster un nouveau projet :
 async function addProject() {
-    const formData = new FormData();
-    
+
+    // Création de l'objet formData :
+    let formData = new FormData();
     formData.append("title", title.value);
-    formData.append("image", imgUpload.value);
-    formData.append("category", categoryId);
-    //console.log(formData);
-    for(var pair of formData.entries()) {
-        console.log(pair[0]+',' + pair[1]);
-    }
-    
-    // Création d'un content-type :
-   // const boundary = '---------------------------1234567890';
-   // const contentType = `multipart/form-data; boundary=${boundary}`;
-    
+    formData.append("image", file);
+    formData.append("category", category.value);
+
+    //Test bonnes infos dans formulaire :
+    //for (var pair of formData.entries()) {
+    //    console.log(pair[0] + ',' + pair[1]);
+    //}
+
     // Appel à fetch :
-    await fetch("http://localhost:5678/api/works", {
-        method: "POST",
-        headers: {
-            'accept': 'application/json',
-            'Authorization': `Bearer ${userToken}`,
-            //'Content-Type': contentType,
-        },
-        body: formData
-    })
-    
-    // Conditions, 
-    // si image ou titre ou catégorie non renseignée,
-    // alors msg d'erreur :
-    if (title.value && selectedImg && categoryId ) {
-        console.log("Tous les éléments sont présents");
-    } else {
-        alert("Veuillez remplir tous les champs")
-    }
+    try {
+        await fetch("http://localhost:5678/api/works", {
+            method: "POST",
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${userToken}`,
+            },
+            body: formData
+        });
+    } catch (error) {
+        console.error(error);
+    };
 };
 
 const sendProject = document.getElementById("valid");
-sendProject.addEventListener("click", (event) => {
+sendProject.addEventListener("click", async (event) => {
     event.preventDefault();
-    addProject();
+    if (title.value === "" || category.value === "" || imgUpload.value === "") {
+        alert("Veuillez remplir tous les champs");
+    } else {
+        sendProject.style.backgroundColor = "#1D6154";
+        console.log("tout est ok");
+    }
+    await addProject();
+
+    // Attendre un court délai pour permettre à l'opération d'ajout de se terminer
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    // Mettre à jour la liste `works` en récupérant les projets depuis le serveur
+    try {
+        const response = await fetch("http://localhost:5678/api/works", {
+            headers: {
+                accept: "application/json",
+                Authorization: `Bearer ${userToken}`,
+            },
+        });
+
+        if (response.ok) {
+            works = await response.json();
+            // Effacer la page pour la régénérer et afficher le nouveau projet :
+            document.querySelector(".gallery").innerHTML = "";
+            generateWorks(works);
+        } else {
+            console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur");
+        }
+    } catch (error) {
+        console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur", error);
+    }
+    closeModal2(event);
+    closeModal(event);
 });

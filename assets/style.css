@@ -209,6 +209,10 @@ input[type="submit"], input[type="button"]{
 	border-radius: 60px ;
 }
 
+#valid {
+	background-color: #A7A7A7;
+}
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
@@ -226,6 +230,7 @@ footer nav ul {
 
 
 .modal {
+	overflow: auto;
 	position: fixed;
 	display: flex;
 	align-items: center;
@@ -250,7 +255,6 @@ footer nav ul {
 	height: 730px;
 	background-color: white;
 	padding: 20px;
-	overflow: auto;
 	border-radius: 10px;
 	display: flex;
 	flex-direction: column;

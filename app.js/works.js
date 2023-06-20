@@ -7,7 +7,7 @@ const works = await reponse.json();
 //
 // Génération des éléments qui composent chaque projet de l'architecte :
 
-function generateWorks(works) {
+export function generateWorks(works) {
     for (let i = 0; i < works.length; i++) {
         
         const project = works[i];
