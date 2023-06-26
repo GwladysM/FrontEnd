@@ -1,8 +1,9 @@
 import { generateWorks } from "./works.js";
+
 // Récupération du token :
 const userToken = window.localStorage.getItem("token");
-//
-// Création de la PREMIERE modale :
+
+// Création de la PREMIERE MODALE :
 let modal = null
 
 const openModal = function (e) {
@@ -31,7 +32,7 @@ const closeModal = function (e) {
 const stopPropagation = function (e) {
     e.stopPropagation()
 }
-//
+
 // Click sur modale 1 :
 document.querySelectorAll(".js-modal").forEach(a => {
     a.addEventListener("click", openModal)
@@ -42,14 +43,11 @@ window.addEventListener("keydown", function (e) {
         closeModal(e)
     }
 })
-//
+
 // Intégration des projets à la modale :
 let works = [];
 const reponse = await fetch('http://localhost:5678/api/works');
 works = await reponse.json();
-
-let trashElement;
-let id;
 
 function galerieWorks(works) {
     for (let i = 0; i < works.length; i++) {
@@ -105,7 +103,7 @@ function galerieWorks(works) {
         }, false);
 
         // Icone supprimer :
-        trashElement = document.createElement("img")
+        let trashElement = document.createElement("img")
         trashElement.src = "assets/icons/trash.png"
         trashElement.style.position = "absolute"
         trashElement.style.zIndex = "2"
@@ -117,12 +115,26 @@ function galerieWorks(works) {
         workElement.appendChild(moveElement);
         workElement.appendChild(trashElement);
 
-        id = project.id;
+        let id = project.id;
+
+        // Création de l'évènement suppression et actualisation du dom :
+        trashElement.addEventListener("click", function () {
+            if (window.confirm("Voulez-vous supprimer ce projet ?")) {
+                deleteWork(id);
+            }
+            const worksMaj = works.filter(function (work) {
+                return work.id !== id;
+            });
+            document.querySelector(".list-galerie").innerHTML = '';
+            galerieWorks(worksMaj);
+            document.querySelector(".gallery").innerHTML = '';
+            generateWorks(worksMaj);
+        });
     }
 }
 galerieWorks(works);
 
-//
+
 // Création de la fonction suppression d'un projet :
 async function deleteWork(id) {
     try {
@@ -139,23 +151,9 @@ async function deleteWork(id) {
     }
 };
 
-// Création de l'évènement suppression et actualisation du dom :
-trashElement.addEventListener("click", function () {
-    if (window.confirm("Voulez-vous supprimer ce projet ?")) {
-        deleteWork(id);
-    }
-    const worksMaj = works.filter(function (work) {
-        return work.id !== id;
-    });
-    document.querySelector(".list-galerie").innerHTML = '';
-    galerieWorks(worksMaj);
-    document.querySelector(".gallery").innerHTML = '';
-    generateWorks(worksMaj);
-    console.log("Ajouter une boucle pour pouvoir supprimer plusieurs projets à la suite ?");
-});
 
-//
-// Création de la DEUXIEME modale, ajout d'un projet : 
+
+// Création de la DEUXIEME MODALE, ajout d'un projet : 
 let modal2 = null
 
 const openModal2 = function (event) {
@@ -169,7 +167,7 @@ const openModal2 = function (event) {
     modal2.querySelector(".js-modal2-back").addEventListener("click", backModal)
     modal2.querySelector(".js-modal2-close").addEventListener("click", closeModal2)
     modal2.querySelector(".js-modal2-stop").addEventListener("click", stopPropagation)
-    }
+}
 
 const closeModal2 = function (event) {
     if (modal2 === null) return
@@ -192,7 +190,7 @@ const backModal = function (event) {
     modal2.style.display = "none"
 }
 
-//
+
 // Bouton ouvrir la modale 2 "ajouter une photo" :
 document.querySelectorAll(".js-modal2").forEach(input => {
     input.addEventListener("click", openModal2)
@@ -218,17 +216,16 @@ function previewFile() {
 }
 
 // Affichage de la photo du projet à la place du logo et "+ ajouter photo" :
-const divElement = document.querySelector(".img-add")
+const divElement = document.querySelector(".img-add");
+const logoElement = document.querySelector("#logo")
+const btnElement = document.querySelector("#btn-img-upload")
+const pElement = document.querySelector("#p")
 
 function displayImage(event, file) {
 
     const imageElement = document.createElement("img");
     imageElement.src = event.target.result;
     imageElement.style.height = "100%";
-
-    const logoElement = document.querySelector("#logo")
-    const btnElement = document.querySelector("#btn-img-upload")
-    const pElement = document.querySelector("#p")
 
     divElement.appendChild(imageElement)
     divElement.appendChild(logoElement)
@@ -240,10 +237,16 @@ function displayImage(event, file) {
     pElement.style.display = "none"
 }
 
-// Fonction pour vider la prévisualisation de l'image :
+// Vider la prévisualisation de l'image :
 function resetImgForm() {
-    console.log("Ajouter quelque chose pour vider la partie image du formulaire");
+    const imgElement = document.querySelector(".img-add img");
+    imgElement.remove();
+
+    logoElement.style.display = "block"; // Afficher le logo
+    btnElement.style.display = "block"; // Afficher le bouton d'ajout de photo
+    pElement.style.display = "block"; // Afficher le texte descriptif
 }
+
 
 //////////////////////////////////////////////////////////
 // Création de la fonction ajout d'un nouveau projet :
@@ -257,9 +260,9 @@ async function addProject() {
     formData.append("category", category.value);
 
     //Test bonnes infos dans formulaire :
-    //for (var pair of formData.entries()) {
-    //    console.log(pair[0] + ',' + pair[1]);
-    //}
+    for (var pair of formData.entries()) {
+        console.log(pair[0] + ',' + pair[1]);
+    }
 
     // Appel à fetch :
     try {
@@ -281,9 +284,6 @@ sendProject.addEventListener("click", async (event) => {
     event.preventDefault();
     if (title.value === "" || category.value === "" || imgUpload.value === "") {
         alert("Veuillez remplir tous les champs");
-    } else {
-        sendProject.style.backgroundColor = "#1D6154";
-        console.log("tout est ok");
     }
     await addProject();
 
@@ -313,3 +313,16 @@ sendProject.addEventListener("click", async (event) => {
     closeModal2(event);
     closeModal(event);
 });
+
+// Fonction pour que le boutton "valider" devienne vert SI les elts sont remplis :
+function changeColorButton() {
+    if (title.value !== "" && category.value !== "" && imgUpload.value !== "") {
+        sendProject.style.backgroundColor = "#1D6154";
+    } else {
+        //Sinon couleur de base
+        sendProject.style.backgroundColor = "";
+    }
+};
+title.addEventListener("input", changeColorButton);
+category.addEventListener("change", changeColorButton);
+imgUpload.addEventListener("change", changeColorButton);

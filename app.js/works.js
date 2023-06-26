@@ -1,12 +1,10 @@
 // Récupération des projets depuis l'API :
 const reponse = await fetch('http://localhost:5678/api/works');
-//
-//création de la constante works qui représente les projets de l'architecte :
+
+//création de la constante works qui représente les projets de l'architecte au format json :
 const works = await reponse.json();
 
-//
 // Génération des éléments qui composent chaque projet de l'architecte :
-
 export function generateWorks(works) {
     for (let i = 0; i < works.length; i++) {
         
@@ -32,11 +30,10 @@ export function generateWorks(works) {
         workElement.appendChild(titleElement);
     }
     
-}
-
+};
 generateWorks(works);
 
-//
+
 // Création des fonctions FILTER pour chaque boutton :
 
 const boutonTous = document.querySelector(".btn-tous");
