@@ -220,10 +220,11 @@ const divElement = document.querySelector(".img-add");
 const logoElement = document.querySelector("#logo")
 const btnElement = document.querySelector("#btn-img-upload")
 const pElement = document.querySelector("#p")
+let imageElement;
 
 function displayImage(event, file) {
 
-    const imageElement = document.createElement("img");
+    imageElement = document.createElement("img");
     imageElement.src = event.target.result;
     imageElement.style.height = "100%";
 
@@ -239,17 +240,16 @@ function displayImage(event, file) {
 
 // Vider la prévisualisation de l'image :
 function resetImgForm() {
-    const imgElement = document.querySelector(".img-add img");
-    imgElement.remove();
+    imageElement.remove();
 
-    logoElement.style.display = "block"; // Afficher le logo
-    btnElement.style.display = "block"; // Afficher le bouton d'ajout de photo
-    pElement.style.display = "block"; // Afficher le texte descriptif
+    logoElement.style.display = "block";
+    btnElement.style.display = "block";
+    pElement.style.display = "block";
 }
 
 
 //////////////////////////////////////////////////////////
-// Création de la fonction ajout d'un nouveau projet :
+// Création de la fonction AJOUT d'un nouveau projet :
 const category = document.getElementById("chose-cat");
 async function addProject() {
 
@@ -284,34 +284,32 @@ sendProject.addEventListener("click", async (event) => {
     event.preventDefault();
     if (title.value === "" || category.value === "" || imgUpload.value === "") {
         alert("Veuillez remplir tous les champs");
-    }
-    await addProject();
+    } else {
+        await addProject();
 
-    // Attendre un court délai pour permettre à l'opération d'ajout de se terminer
-    await new Promise((resolve) => setTimeout(resolve, 500));
+        // Mettre à jour la liste des projets en les récupérant via l'api :
+        try {
+            const response = await fetch("http://localhost:5678/api/works", {
+                headers: {
+                    accept: "application/json",
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
 
-    // Mettre à jour la liste `works` en récupérant les projets depuis le serveur
-    try {
-        const response = await fetch("http://localhost:5678/api/works", {
-            headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${userToken}`,
-            },
-        });
-
-        if (response.ok) {
-            works = await response.json();
-            // Effacer la page pour la régénérer et afficher le nouveau projet :
-            document.querySelector(".gallery").innerHTML = "";
-            generateWorks(works);
-        } else {
-            console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur");
+            if (response.ok) {
+                works = await response.json();
+                // Effacer la page pour la régénérer et afficher le nouveau projet :
+                document.querySelector(".gallery").innerHTML = "";
+                generateWorks(works);
+            } else {
+                console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur");
+            }
+        } catch (error) {
+            console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur", error);
         }
-    } catch (error) {
-        console.error("Une erreur s'est produite lors de la récupération des projets depuis le serveur", error);
+        closeModal2(event);
+        closeModal(event);
     }
-    closeModal2(event);
-    closeModal(event);
 });
 
 // Fonction pour que le boutton "valider" devienne vert SI les elts sont remplis :
